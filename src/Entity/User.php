@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ApiResource(normalizationContext={"groups"={"users_read"}})
  */
 class User implements UserInterface
 {
@@ -16,32 +20,42 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"users_read", "invoices_read", "invoices_subresource"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"users_read", "invoices_read", "customers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="L'email' doit être renseignée")
+     * @Assert\Email(message ="L'adresse email doit un format valide !")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users_read", "invoices_read", "customers_read", "invoices_subresource"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire !")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read", "invoices_read", "customers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="Le prénom de l'utilisateur est obligatoire !")
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read", "invoices_read", "customers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="Le nom de l'utilisateur est obligatoire !")
      */
     private $lastName;
 

@@ -9,21 +9,21 @@ use Doctrine\ORM\EntityManagerInterface;
  * Class InvoiceIncrementationController
  * @package App\Controller
  */
-class InvoiceIncrementationController 
+class InvoiceIncrementationController
 {
-   /** 
-    * @var EntityManagerInterface 
-    */
+    /**
+     * @var EntityManagerInterface
+     */
     private $manager;
     public function __construct(EntityManagerInterface $manager)
     {
-        $this->manager = $manager; 
+        $this->manager = $manager;
     }
     public function __invoke(Invoice $data)
     {
         $data->setChrono($data->getChrono() + 1);
         $this->manager->flush();
-        dd($data);
+        // dd($data);
         return $data;
-     }
+    }
 }

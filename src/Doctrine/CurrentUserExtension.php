@@ -30,7 +30,7 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
         // 2. Si on demande des invoices ou des customers alors, agir sur la requête pour qu'elle tienne compte de l'utilisateur connecté
         if (($resourceClass === Customer::class || $resourceClass === Invoice::class) && !$this->auth->isGranted('ROLE_ADMIN') && $user instanceof User) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
-            if ($resourceClass == Customer::class) {
+            if ($resourceClass === Customer::class) {
                 $queryBuilder->andWhere("$rootAlias.user = :user");
             } else if ($resourceClass === Invoice::class) {
                 $queryBuilder->join("$rootAlias.customer", "c")

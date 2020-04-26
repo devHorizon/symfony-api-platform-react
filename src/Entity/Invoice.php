@@ -27,9 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *   }
  *  },
  * attributes={
- *   "pagination_enabled"=true,
+ *   "pagination_enabled"=false,
  *   "pagination_items_per_page"=20,
- *   "order": {"amount":"desc"}
+ *   "order": {"sentAt":"desc"}
  * },
  * normalizationContext={"groups"={"invoices_read"}},
  * denormalizationContext={"disable_type_enforcement"=true}
@@ -87,7 +87,7 @@ class Invoice
 
     /**
      * Permet de récupérer le User à qui appartient finalement la facture
-     * @Groups({"invoices_read", "invoices_subresource"})
+     * @Groups({"invoices_subresource"})
      * @return User
      */
     public function getUser(): User

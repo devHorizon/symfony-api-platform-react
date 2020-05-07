@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/api-course.iml" filepath="$PROJECT_DIR$/.idea/api-course.iml" />
+      <module fileurl="file://C://development/../../Development/Php/api-course/.idea/api-course.iml" filepath="C://development/../../Development/Php/api-course/.idea/api-course.iml" />
     </modules>
   </component>
 </project>

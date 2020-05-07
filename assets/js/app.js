@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import ReactDOM from "react-dom";
-import { HashRouter, Switch, Route } from "react-router-dom";
-import CustomersPageWithPagination from "./pages/CustomersPageWithPagination";
+import {HashRouter, Switch, Route, withRouter, Redirect} from "react-router-dom";
+import Navbar from "./components/Navbar";
 import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import AuthAPI from "./services/authAPI";
+import AuthContext from "./contexts/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -14,33 +19,44 @@ import HomePage from "./pages/HomePage";
 
 // any CSS you import will output into a single css file (app.css in this case)
 import '../css/app.css';
-import Navbar from "./components/Navbar";
-
 
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+AuthAPI.setup();
+
 
 const App = () => {
-    return(
+    const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
+    const NavBarWithRouter = withRouter(Navbar);
+
+    return (
+        <AuthContext.Provider value={{
+            isAuthenticated,
+            setIsAuthenticated
+        }}>
         <HashRouter>
-            <Navbar/>
+            <NavBarWithRouter />
             <main className="container pt-5">
                 <Switch>
-                    <Route path="/invoices" component={InvoicesPage} />
-                    <Route path="/customers" component={CustomersPage} />
-                    {/*<Route path="/customers" component={CustomersPageWithPagination} />*/}
-                    <Route path="/" component={HomePage} />
-                </Switch>
+                    <Route
+                        path="/login"
+                        component={LoginPage}
+                    />
+                    <PrivateRoute path="/invoices" component={InvoicesPage}/>
+                    <PrivateRoute path="/customers" component={CustomersPage}/>
+                        {/*<Route path="/customers" component={CustomersPageWithPagination} />*/}
+                    <Route path="/" component={HomePage}/>
+                    </Switch>
             </main>
         </HashRouter>
+        </AuthContext.Provider>
     );
 };
 
 const rootElement = document.querySelector("#app");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(<App/>, rootElement);
 
 
 // import React, {Component} from 'react';

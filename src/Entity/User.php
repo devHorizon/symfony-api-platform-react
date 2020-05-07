@@ -31,6 +31,7 @@ class User implements UserInterface
      * @Assert\Email(message ="L'adresse email doit un format valide !")
      */
     private $email;
+    
 
     /**
      * @ORM\Column(type="json")

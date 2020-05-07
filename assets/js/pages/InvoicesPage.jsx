@@ -60,7 +60,7 @@ const InvoicesPage = props => {
         setCurrentPage(1);
     };
 
-    const itemsPerPage = 8;
+    const itemsPerPage = 20;
 
 // Filtrage des customers en fonction de la recherche
     const filteredInvoices = invoices.filter(

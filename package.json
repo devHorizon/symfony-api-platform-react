@@ -9,13 +9,14 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-        "dev-server": "encore dev-server",
+        "dev-server": "encore dev-server --port 8080",
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
     "dependencies": {
         "axios": "^0.19.2",
+        "dotenv": "^8.2.0",
         "jwt-decode": "^2.2.0",
         "moment": "^2.24.0",
         "prop-types": "^15.7.2",

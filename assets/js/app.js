@@ -9,7 +9,9 @@ import LoginPage from "./pages/LoginPage";
 import AuthAPI from "./services/authAPI";
 import AuthContext from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
-
+import CustomerPage from "./pages/CustomerPage";
+import InvoicePage from "./pages/InvoicePage";
+import RegisterPage from "./pages/RegisterPage";
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -36,21 +38,27 @@ const App = () => {
             isAuthenticated,
             setIsAuthenticated
         }}>
-        <HashRouter>
-            <NavBarWithRouter />
-            <main className="container pt-5">
-                <Switch>
-                    <Route
-                        path="/login"
-                        component={LoginPage}
+            <HashRouter>
+                <NavBarWithRouter/>
+                <main className="container pt-5">
+                    <Switch>
+                        <Route
+                            path="/login"
+                            component={LoginPage}
+                        />
+                        <Route
+                        path="/register"
+                        component={RegisterPage}
                     />
-                    <PrivateRoute path="/invoices" component={InvoicesPage}/>
-                    <PrivateRoute path="/customers" component={CustomersPage}/>
+                        <PrivateRoute path="/invoices/:id" component={InvoicePage}/>
+                        <PrivateRoute path="/invoices" component={InvoicesPage}/>
+                        <PrivateRoute path="/customers/:id" component={CustomerPage}/>
+                        <PrivateRoute path="/customers" component={CustomersPage}/>
                         {/*<Route path="/customers" component={CustomersPageWithPagination} />*/}
-                    <Route path="/" component={HomePage}/>
+                        <Route path="/" component={HomePage}/>
                     </Switch>
-            </main>
-        </HashRouter>
+                </main>
+            </HashRouter>
         </AuthContext.Provider>
     );
 };

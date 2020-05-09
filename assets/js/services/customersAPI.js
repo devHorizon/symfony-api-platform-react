@@ -1,26 +1,70 @@
 import axios from 'axios';
+import Cache from "./cache";
+import {CUSTOMERS_API} from "../config";
 
-function findAll() {
+
+async function findAll() {
+    const cachedCustomers = await Cache.get("customers");
+    if (cachedCustomers) return cachedCustomers;
     return axios
-        .get("https://127.0.0.1:8000/api/customers")
-        .then(response => response.data["hydra:member"]);
+        .get(CUSTOMERS_API)
+        .then(response => {
+            const customers = response.data["hydra:member"];
+            Cache.set("customers", customers);
+            return customers;
+        });
 }
-function find(id){
+
+async function find(id) {
+    const cachedCustomer = await Cache.get("customers." + id);
+    if (cachedCustomer) return cachedCustomer;
+
     return axios
-        .get("https://localhost:8000/api/customers/" + id)
-        .then(response => response.data);
+        .get(CUSTOMERS_API + "/" + id)
+        .then(response => {
+            const customer = response.data;
+            Cache.set("customers." + id, customer);
+            return customer;
+        });
 }
+
 function deleteCustomer(id) {
     return axios
-        .delete("https://127.0.0.1:8000/api/customers/" + id);
-}
-function update(id, customer) {
-    return axios.put("https://localhost:8000/api/customers/" + id, customer);
+        .delete(CUSTOMERS_API + "/" + id).then(async response => {
+            const cachedCustomers = await Cache.get("customers");
+            if (cachedCustomers) {
+                Cache.set("customers", cachedCustomers.filter(c => c.id !== id));
+            }
+            return response;
+        });
 }
 
-function create(customer){
-    return axios.post("https://localhost:8000/api/customers", customer);
+function update(id, customer) {
+    return axios.put(CUSTOMERS_API + "/" + id, customer).then(async response => {
+        const cachedCustomers = await Cache.get("customers");
+        const cachedCustomer = await Cache.get("customers." + id);
+        if (cachedCustomer) {
+            Cache.set("customers." + id, response.data);
+        }
+        if (cachedCustomers) {
+            const index = cachedCustomers.findIndex(c => c.id === +id);
+            const newCachedCustomers = response.data;
+            cachedCustomers[index] = newCachedCustomers;
+        }
+        return response;
+    });
 }
+
+function create(customer) {
+    return axios.post(CUSTOMERS_API, customer).then(async response => {
+        const cachedCustomers = await Cache.get("customers");
+        if (cachedCustomers) {
+            Cache.set("customers", [...cachedCustomers, response.data]);
+        }
+        return response;
+    });
+}
+
 export default {
     findAll,
     find,
